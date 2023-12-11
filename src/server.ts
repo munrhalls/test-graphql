@@ -1,35 +1,44 @@
-const { fastify, FastifyRequest } = require("fastify");
+const { fastify, Request: fastifyRequest } = require("fastify");
 const {
   getGraphQLParameters,
   processRequest,
-  renderGraphiQL,
-  shouldRenderGraphiQL,
+  sendResult,
 } = require("graphql-helix");
-const server = fastify();
+const executableSchema = require("./schema/schema.ts");
 
-server.route({
-  url: "/graphql",
-  method: "POST",
-  handler: async (req: typeof FastifyRequest) => {
-    const helixRequest = {
-      headers: req.headers,
-      method: req.method,
-      body: req.body,
-      query: req.query,
-    };
+async function main() {
+  const server = fastify();
 
-    const { operationName, query, variables } = getGraphQLParameters();
+  console.log(executableSchema);
 
-    processRequest({
-      request,
-      schema,
-      operationName,
-      query,
-      variables,
-    });
-  },
-});
+  server.route({
+    method: "POST",
+    url: "/graphql",
+    handler: async (req: typeof fastifyRequest, reply: Response) => {
+      const request: typeof fastifyRequest = {
+        headers: req.headers,
+        method: req.method,
+        query: req.query,
+        body: req.body,
+      };
 
-server.listen(3000, "localhost", () => {
-  console.log("GraphQL server listening on port 3000...");
-});
+      const { operationName, query, variables } = getGraphQLParameters(request);
+
+      const result = await processRequest({
+        request,
+        schema,
+        operationName,
+        query,
+        variables,
+      });
+
+      sendResult(result, reply.raw);
+    },
+  });
+
+  server.listen(3000, "0.0.0.0", () => {
+    console.log(`Server is running on http://localhost:3000/`);
+  });
+}
+
+main();
