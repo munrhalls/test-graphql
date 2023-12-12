@@ -1,0 +1,39 @@
+AUTHOR'S NOTES (MUNRHALL):
+
+FIRST ISSUE IS CRITICALLY IMPORTANT: GET IT RIGHT OR YOUR TYPESCRIPT'S USELESS.
+
+IF YOU GET IT WRONG IN NODE.JS, YOUR TypeScript DOESN'T DO REAL TYPE CHECKS.
+
+SO FIRST OF ALL, TYPESCRIPT DOCS ARTICLE on CommonJS vs ES Modules:
+https://www.typescriptlang.org/docs/handbook/modules/appendices/esm-cjs-interop.html?.
+
+QUOTE TYPESCRIPT DOCS: 
+"CONCLUSIONS. Clearly, a seamless migration from transpiled modules to ESM isn’t possible, at least in Node.js. Where does this leave us?"
+
+SUMMARY OF THE TYPESCRIPT DOCS ARTICLE: 
+Transpiling CommonJS to ES modules is a real problem. It's not yet solved (12.2023). The way to sidestep it is to use verbatimModuleSyntax in TS config.
+
+WHY?
+TS DOCS (quotation): "using verbatimModuleSyntax completely sidesteps the issue with esModuleInterop by forcing CommonJS-emitting files to use CommonJS-style import and export syntax. Additionally, since esModuleInterop only affects CommonJS, as more libraries move to ESM-only publishing over time, the relevance of this issue will decline."
+
+In short: use verbatimModuleSyntax = "forcing CommonJS-emitting files to use CommonJS-style import and export syntax" & it only affects CommonJS dependencies. 
+
+So to avoid CommonJS vs ES Modules in Node.js use:
+esModuleInterop + verbatimModuleSyntax. 
+
+esModuleInterop is NOT a problem IF you use verbatimModuleSyntax because verbatimModuleSyntax causes ONLY CommonJS-emitting files to use CommonJS-style import/export.
+
+THAT'S WHY I USE:
+verbatimModuleSyntax: true,
+esModuleInterop: true.
+
+///////////////////////////////
+SECOND ISSUE IS ABOUT FASTIFY (framework similar to Express) FOR CODING Node.js SERVER *WITH* TYPESCRIPT.
+
+Why "target": "es2017" in TS config?
+FASTIFY DOCS (12.2023): "Set target property in tsconfig.json to es2017 or greater to avoid FastifyDeprecation warning."
+
+Why "moduleResolution": "Node" in TS config?
+FASTIFY DOCS (12.2023): Avoid using "moduleResolution": "NodeNext" in tsconfig.json with "type": "module" in package.json. This combination is currently not supported by fastify typing system. ts(2349) warning.
+
+
