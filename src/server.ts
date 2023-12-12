@@ -1,8 +1,14 @@
-// IMPORTANT: importing fastify is meant to be with CommonJS from intent to only use CommonJS
-// Why? Probably best compatibility
-// TS configs: "moduleResolution": "Node" | "verbatimModuleSyntax": true  | "esModuleInterop": true
-// Why? verbatimModuleSyntax sidesteps issues of transpiling to CommonJS
-// TS docs explanation: https://www.typescriptlang.org/docs/handbook/modules/appendices/esm-cjs-interop.html?
+/* IMPORTANT 
+- all CommonJS modules jere stay CommonJS modules best compatibility
+
+- syntax is //import fastify from "fastify"// for ES modules 
+- for CommonJS modules, with verbatimModuleSyntax + esModuleInterop, 
+syntax has to be pre-2015 TS //import foo = require("foo")//
+
+- TS configs: "moduleResolution": "Node" | "verbatimModuleSyntax": true  | "esModuleInterop": true
+- Why? verbatimModuleSyntax sidesteps issues of transpiling to CommonJS
+- TS docs explanation: https://www.typescriptlang.org/docs/handbook/modules/appendices/esm-cjs-interop.html?
+*/
 
 import fastify from "fastify";
 const {
