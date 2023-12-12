@@ -1,0 +1,17 @@
+
+
+const typeDefs = `
+type Product {
+  name: String!
+  price: Float!
+  currency: String!
+  category: String!
+  description: String!
+}
+
+  type Query {
+    products: [Product]!
+  }
+`;
+
+module.exports = typeDefs;

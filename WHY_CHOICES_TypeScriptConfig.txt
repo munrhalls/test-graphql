@@ -1,11 +1,18 @@
 AUTHOR'S NOTES (MUNRHALL):
 
-FIRST ISSUE IS CRITICALLY IMPORTANT: GET IT RIGHT OR YOUR TYPESCRIPT'S USELESS.
-
-IF YOU GET IT WRONG IN NODE.JS, YOUR TypeScript DOESN'T DO REAL TYPE CHECKS.
+FIRST ISSUE IS CRITICALLY IMPORTANT: GET IT RIGHT OR YOUR TYPESCRIPT'S USELESS. 
+OR YOU CAN'T RESOLVE TYPES FOR NO REASON. 
 
 SO FIRST OF ALL, TYPESCRIPT DOCS ARTICLE on CommonJS vs ES Modules:
 https://www.typescriptlang.org/docs/handbook/modules/appendices/esm-cjs-interop.html?
+
+IF YOU GET CommonJS/ES Modules CONFIG vs YOUR DEPENDENCIES WRONG IN NODE.JS, YOUR TypeScript DOESN'T DO REAL TYPE CHECKS & YOU MIGHT AS WELL UNINSTALL IT.
+
+UNDERSTAND IN PRACTICE:
+- PROBLEM: I import fastify using require('fastify') CommonJS import style. All is well...EXCEPT NO, THE REQUEST OBJECT IS NOT FASTIFY'S = HAS NO QUERY FIELD = TYPESCRIPT CANNOT TRANSPILE!!! The object doesn't have the fastify types at all (e.g. query field). 
+- SOLUTION: You need to configure TypeScript properly. So that you can do the workaround + adhere to fastify dependency requirements at the same time: "import fastify = require("fastify")" -> and your TypeScript types now work properly + all fastify typescript config requirements are satisfied. 
+
+HERE'S UNDERSTANDING OF WHAT FIELDS TO CONFIG IN TYPESCRIPT & WHY:
 
 QUOTE TYPESCRIPT DOCS: 
 "CONCLUSIONS. Clearly, a seamless migration from transpiled modules to ESM isn’t possible, at least in Node.js. Where does this leave us?"
@@ -34,7 +41,6 @@ Why "target": "es2017" in TS config?
 FASTIFY DOCS (12.2023): "Set target property in tsconfig.json to es2017 or greater to avoid FastifyDeprecation warning."
 
 Why "moduleResolution": "node16" in TS config?
-
 
 FASTIFY DOCS (12.2023): "Avoid using "moduleResolution": "NodeNext" in tsconfig.json with "type": "module" in package.json. This combination is currently not supported by fastify typing system. ts(2349) warning."
 TYPESCRIPT DOCS (12.2023): "The compiler’s output is not checked for Node.js compatibility unless module is set to node16 or nodenext."

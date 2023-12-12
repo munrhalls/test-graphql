@@ -1,6 +1,0 @@
-type Link {
-  id: String!
-  description: String!
-  url: String!
-}
-module.exports = * 

@@ -1,10 +1,11 @@
-import fastify from "fastify";
+import fastify = require("fastify");
+const { schema } = require("../schema/schema");
+
 const {
   getGraphQLParameters,
   processRequest,
   sendResult,
 } = require("graphql-helix");
-const executableSchema = require("./schema/schema.ts");
 
 async function main() {
   const server = fastify();
