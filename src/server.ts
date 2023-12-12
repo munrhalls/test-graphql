@@ -1,4 +1,10 @@
-const { fastify, Request: fastifyRequest } = require("fastify");
+// IMPORTANT: importing fastify is meant to be with CommonJS from intent to only use CommonJS
+// Why? Probably best compatibility
+// TS configs: "moduleResolution": "Node" | "verbatimModuleSyntax": true  | "esModuleInterop": true
+// Why? verbatimModuleSyntax sidesteps issues of transpiling to CommonJS
+// TS docs explanation: https://www.typescriptlang.org/docs/handbook/modules/appendices/esm-cjs-interop.html?
+
+import fastify from "fastify";
 const {
   getGraphQLParameters,
   processRequest,
@@ -9,17 +15,17 @@ const executableSchema = require("./schema/schema.ts");
 async function main() {
   const server = fastify();
 
-  console.log(executableSchema);
-
   server.route({
     method: "POST",
     url: "/graphql",
-    handler: async (req: typeof fastifyRequest, reply: Response) => {
-      const request: typeof fastifyRequest = {
-        headers: req.headers,
-        method: req.method,
-        query: req.query,
-        body: req.body,
+    handler: async function (request, reply) {
+      console.log(request);
+
+      const Request = {
+        headers: request.headers,
+        method: request.method,
+        query: request.query,
+        body: request.body,
       };
 
       const { operationName, query, variables } = getGraphQLParameters(request);
